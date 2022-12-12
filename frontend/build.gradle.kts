@@ -10,11 +10,16 @@ node {
   download.set(true)
 }
 
-val appNpmBuild = tasks.register<NpmTask>("appNpmBuild") {
+val npmBuild = tasks.register<NpmTask>("npmBuild") {
   dependsOn(tasks.named("npmInstall"))
   args.set(listOf("run", "build"))
 }
 
+tasks.register<NpmTask>("npmDev") {
+  dependsOn(npmBuild)
+  args.set(listOf("run", "dev"))
+}
+
 tasks.named("assemble") {
-  dependsOn(appNpmBuild)
+  dependsOn(npmBuild)
 }
