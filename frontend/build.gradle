@@ -1,0 +1,25 @@
+import com.github.gradle.node.npm.task.NpmTask
+
+plugins {
+  id 'com.github.node-gradle.node' version '3.5.0'
+  id 'base'
+}
+
+node {
+  version = '18.12.1'
+  download = true
+}
+
+def npmBuild = tasks.register('npmBuild', NpmTask) {
+  dependsOn tasks.named('npmInstall')
+  args = ['run', 'build']
+}
+
+tasks.register('npmDev', NpmTask) {
+  dependsOn npmBuild
+  args = ['run', 'dev']
+}
+
+tasks.named('assemble') {
+  dependsOn npmBuild
+}
